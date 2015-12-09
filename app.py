@@ -3,7 +3,7 @@
 import boto3
 import connexion
 import logging
-import json
+import uuid
 
 from flask import abort, g
 
@@ -23,7 +23,11 @@ def get_users_table():
     return get_db().Table('users')
 
 def create_user(body) -> str:
-    return get_users_table().put_item(Item=body)
+    body['id'] = str(uuid.uuid4())
+
+    get_users_table().put_item(Item=body)
+
+    return body
 
 def get_user_by_id(id) -> str:
     response = get_users_table().get_item(Key={'id': id})
