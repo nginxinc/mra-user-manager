@@ -37,6 +37,60 @@ paths:
       x-tags:
       - tag: "user"
       x-operationId: "create_user"
+  /users/facebook/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by facebook id"
+      description: ""
+      operationId: "app.get_user_by_facebook_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_facebook_id"
+  /users/google/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by google id"
+      description: ""
+      operationId: "app.get_user_by_google_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_google_id"
   /users/{id}:
     get:
       tags:
@@ -49,7 +103,7 @@ paths:
       parameters:
       - name: "id"
         in: "path"
-        description: "The id that needs to be fetched. Use user1 for testing."
+        description: "The id that needs to be fetched."
         required: true
         type: "string"
       responses:
@@ -126,9 +180,7 @@ definitions:
         type: "string"
       email:
         type: "string"
-      password:
+      facebook_id:
         type: "string"
-      phone:
-        type: "string"
-      userStatus:
+      google_id:
         type: "string"

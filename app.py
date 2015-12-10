@@ -7,6 +7,8 @@ import uuid
 
 from flask import abort, g
 
+from boto3.dynamodb.conditions import Key
+
 from os.path import join, dirname
 from dotenv import load_dotenv
 
@@ -22,6 +24,18 @@ def get_db():
 def get_users_table():
     return get_db().Table('users')
 
+def get_user_by_index_and_key(index, key, id):
+    response = get_users_table().query(
+        IndexName=index,
+        KeyConditionExpression=Key(key).eq(id)
+    )
+
+    if not response['Items']:
+        abort(404)
+
+    item = response['Items'][0]
+    return item
+
 def create_user(body) -> str:
     body['id'] = str(uuid.uuid4())
 
@@ -36,6 +50,12 @@ def get_user_by_id(id) -> str:
         abort(404)
 
     return response['Item']
+
+def get_user_by_facebook_id(id) -> str:
+    return get_user_by_index_and_key('facebook_id-index', 'facebook_id', id)
+
+def get_user_by_google_id(id) -> str:
+    return get_user_by_index_and_key('google_id-index', 'google_id', id)
 
 def update_user(id, body) -> str:
     item = get_user_by_id(id)
