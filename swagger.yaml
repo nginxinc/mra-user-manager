@@ -171,11 +171,7 @@ definitions:
   User:
     type: "object"
     properties:
-      username:
-        type: "string"
-      firstName:
-        type: "string"
-      lastName:
+      name:
         type: "string"
       email:
         type: "string"
