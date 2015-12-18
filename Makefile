@@ -1,6 +1,6 @@
 tag = ngrefarch/user-manager
 volumes = -v $(CURDIR):/usr/src/app
-ports = -p 80:8080
+ports = -p 8080:8080
 env = --env-file=.env
 
 build:
