@@ -179,3 +179,5 @@ definitions:
         type: "string"
       google_id:
         type: "string"
+      banner_album_id:
+        type: "string"
