@@ -17,3 +17,6 @@ shell:
 
 push:
 	docker push $(tag)
+
+test:
+	# Tests not yet implemented

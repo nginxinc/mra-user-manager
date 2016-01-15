@@ -1,0 +1,24 @@
+sudo: required
+language: python
+
+services:
+- docker
+
+before_install:
+- make build
+
+script:
+- make test
+- make push
+
+deploy:
+  provider: deis
+  edge: true
+  verbose: true
+  controller: deis.ngra.ps.nginxlab.com
+  app: user-manager
+  cli_version: 1.11.2
+  username: deploymentuser
+  password: deployment
+  on:
+    repo: nginxinc/user-manager
