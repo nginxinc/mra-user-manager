@@ -26,7 +26,7 @@ VOLUME ["/var/cache/nginx"]
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='album-manager' sh ./amplify_install.sh
+RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
 
 CMD ["./start.sh"]
 
