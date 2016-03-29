@@ -1,10 +1,13 @@
 tag = ngrefarch/user-manager
-volumes = -v $(CURDIR):/usr/src/app
+volumes = -v $(CURDIR):/usr/src/app -v $(CURDIR)/nginx.conf:/etc/nginx/nginx.conf
 ports = -p 80:80
 env = --env-file=.env
 
 build:
-	docker build -t $(tag) .
+	docker build --build-arg VAULT_TOKEN=$(VAULT_TOKEN) -t $(tag) .
+
+build-clean:
+	docker build --no-cache --build-arg VAULT_TOKEN=$(VAULT_TOKEN) -t $(tag) .
 
 run:
 	docker run -it ${env} $(ports) $(tag)
@@ -20,3 +23,8 @@ push:
 
 test:
 	# Tests not yet implemented
+	
+check-env:
+ifndef VAULT_TOKEN
+    $(error VAULT_TOKEN is undefined)
+endif
