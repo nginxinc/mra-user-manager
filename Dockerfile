@@ -62,4 +62,4 @@ RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./ampl
 
 CMD ["./start.sh"]
 
-EXPOSE 80
+EXPOSE 80 443
