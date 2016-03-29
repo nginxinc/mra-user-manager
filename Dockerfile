@@ -1,5 +1,5 @@
-FROM ubuntu:14.04
-#FROM python:3.5.1
+#FROM ubuntu:14.04
+FROM python:3.5.1
 
 # Set the debconf front end to Noninteractive
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -31,14 +31,14 @@ RUN apt-get update && apt-get install -y -f\
 # RUN apt-get update && apt-get install -y -q python-pip
 # 
 # RUN pip install -U pip
-# 
-# RUN mkdir -p /usr/src/app
-# WORKDIR /usr/src/app
-# 
-# COPY ./requirements.txt /usr/src/app/
-# RUN pip install -r requirements.txt
-# 
-# COPY . /usr/src/app
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
+
+COPY . /usr/src/app
 
 # Download certificate and key from the the vault and copy to the build context
 ARG VAULT_TOKEN
@@ -73,7 +73,7 @@ COPY ./nginx-ssl.conf /etc/nginx/
 
 #RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
 
-#CMD ["./start.sh"]
-CMD ["nginx"]
+CMD ["./start.sh"]
+#CMD ["nginx"]
 
 EXPOSE 80
