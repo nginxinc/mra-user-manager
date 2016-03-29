@@ -1,11 +1,10 @@
-#FROM ubuntu:14.04
 FROM python:3.5.1
 
 # Set the debconf front end to Noninteractive
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
 # persistent / runtime deps
-RUN apt-get update && apt-get install -y -f\
+RUN apt-get update && apt-get install -y \
 	jq \
 	libffi-dev \
 	libssl-dev \
@@ -19,18 +18,6 @@ RUN apt-get update && apt-get install -y -f\
 	libxml2 \
 	lsb-release \
 	--no-install-recommends && rm -r /var/lib/apt/lists/*
-
-# RUN wget https://www.python.org/ftp/python/3.5.0/Python-3.5.0.tgz && \
-# 	tar xzvf Python-3.5.0.tgz && \
-# 	cd Python-3.5.0 && \
-# 	./configure
-# 	
-# RUN	cd Python-3.5.0 && make
-# RUN cd Python-3.5.0 && make install
-# 
-# RUN apt-get update && apt-get install -y -q python-pip
-# 
-# RUN pip install -U pip
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
@@ -56,9 +43,9 @@ COPY ./dhparam.pem /etc/ssl/nginx/
 RUN wget -q -O /etc/ssl/nginx/CA.crt https://cs.nginx.com/static/files/CA.crt && \
 	wget -q -O - http://nginx.org/keys/nginx_signing.key | apt-key add - && \
 	wget -q -O /etc/apt/apt.conf.d/90nginx https://cs.nginx.com/static/files/90nginx && \
-	printf "deb https://plus-pkgs.nginx.com/ubuntu `lsb_release -cs` nginx-plus\n" >/etc/apt/sources.list.d/nginx-plus.list
+	printf "deb https://plus-pkgs.nginx.com/debian `lsb_release -cs` nginx-plus\n" >/etc/apt/sources.list.d/nginx-plus.list
 
-# Install NGINX Plus
+#Install NGINX Plus
 RUN apt-get update && apt-get install -y apt-transport-https nginx-plus-extras
 
 # forward request and error logs to docker log collector
@@ -71,9 +58,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx-gz.conf /etc/nginx/
 COPY ./nginx-ssl.conf /etc/nginx/
 
-#RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
+RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
 
 CMD ["./start.sh"]
-#CMD ["nginx"]
 
 EXPOSE 80
