@@ -58,7 +58,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx-gz.conf /etc/nginx/
 COPY ./nginx-ssl.conf /etc/nginx/
 
-RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
+RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='mesos-user-manager' sh ./amplify_install.sh
 
 CMD ["./start.sh"]
 
