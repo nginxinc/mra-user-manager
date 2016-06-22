@@ -4,6 +4,7 @@ import boto3
 import connexion
 import logging
 import uuid
+import os
 
 from flask import abort, g
 
@@ -18,7 +19,7 @@ load_dotenv(dotenv_path)
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db = g._database = boto3.resource('dynamodb')
+        db = g._database = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
     return db
 
 def get_users_table():
