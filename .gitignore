@@ -1,5 +1,10 @@
+/user-manager.iml
 .idea
 .env
 env
 *.pyc
 .DS_Store
+certificate.pem
+csr.pem
+dhparam.pem
+key.pem

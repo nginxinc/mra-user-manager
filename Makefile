@@ -1,10 +1,13 @@
 tag = ngrefarch/user-manager
-volumes = -v $(CURDIR):/usr/src/app
-ports = -p 80:80
+volumes = -v $(CURDIR):/usr/src/app -v $(CURDIR)/nginx.conf:/etc/nginx/nginx.conf
+ports = -p 443:443
 env = --env-file=.env
 
 build:
 	docker build -t $(tag) .
+
+build-clean:
+	docker build --no-cache -t $(tag) .
 
 run:
 	docker run -it ${env} $(ports) $(tag)

@@ -12,7 +12,7 @@ info:
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 basePath: "/v1"
 schemes:
-- "http"
+- "https"
 paths:
   /users:
     post:
