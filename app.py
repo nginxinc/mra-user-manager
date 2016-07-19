@@ -16,6 +16,9 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
+def healthcheck():
+    return ('', 204)
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:

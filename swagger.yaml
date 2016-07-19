@@ -14,6 +14,9 @@ basePath: "/v1"
 schemes:
 - "https"
 paths:
+  /:
+    get:
+      operationId: "app.healthcheck"
   /users:
     post:
       tags:

@@ -22,11 +22,6 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-COPY ./requirements.txt /usr/src/app/
-RUN pip install -r requirements.txt
-
-COPY . /usr/src/app
-
 # Install vault client
 RUN wget -q https://releases.hashicorp.com/vault/0.6.0/vault_0.6.0_linux_amd64.zip && \
 	  unzip -d /usr/local/bin vault_0.6.0_linux_amd64.zip
