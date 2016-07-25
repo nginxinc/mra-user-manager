@@ -14,7 +14,7 @@ fi
 
 $APP 
 
-nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;" &
+nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;"
 
 service amplify-agent start
 

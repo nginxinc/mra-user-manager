@@ -73,4 +73,4 @@ RUN curl -sS -L -O  https://github.com/nginxinc/nginx-amplify-agent/raw/master/p
 
 CMD ["./start.sh"]
 
-EXPOSE 443
+EXPOSE 80 443
