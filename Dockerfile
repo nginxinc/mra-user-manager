@@ -59,6 +59,7 @@ VOLUME ["/var/cache/nginx"]
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx-gz.conf /etc/nginx/
 COPY ./nginx-ssl.conf /etc/nginx/
+COPY ./nginx-fabric.conf /etc/nginx/
 
 COPY ./status.html /usr/share/nginx/html/status.html
 
