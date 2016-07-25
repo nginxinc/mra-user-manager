@@ -5,6 +5,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
 
 # persistent / runtime deps
 RUN apt-get update && apt-get install -y \
+	jq \
 	libffi-dev \
 	libssl-dev \
 	make \
@@ -25,6 +26,8 @@ WORKDIR /usr/src/app
 # Install vault client
 RUN wget -q https://releases.hashicorp.com/vault/0.6.0/vault_0.6.0_linux_amd64.zip && \
 	  unzip -d /usr/local/bin vault_0.6.0_linux_amd64.zip
+COPY ./requirements.txt /usr/src/app/
+RUN pip install -r requirements.txt
 
 # Download certificate and key from the the vault and copy to the build context
 ENV VAULT_TOKEN=4b9f8249-538a-d75a-e6d3-69f5355c1751 \
@@ -57,13 +60,16 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx-gz.conf /etc/nginx/
 COPY ./nginx-ssl.conf /etc/nginx/
 
-COPY amplify_install.sh amplify_install.sh
-RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='user-manager' sh ./amplify_install.sh
+COPY ./status.html /usr/share/nginx/html/status.html
 
 COPY requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app
+
+# Install Amplify
+RUN curl -sS -L -O  https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh && \
+	API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' AMPLIFY_HOSTNAME='mesos-user-manager' sh ./install.sh
 
 CMD ["./start.sh"]
 
