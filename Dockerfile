@@ -37,8 +37,6 @@ RUN wget -q -O - --header="X-Vault-Token: $VAULT_TOKEN" http://vault.ngra.ps.ngi
 COPY ./certificate.pem /etc/ssl/nginx/
 COPY ./key.pem /etc/ssl/nginx/
 COPY ./dhparam.pem /etc/ssl/nginx/
-# COPY ./letsencrypt.etc /etc/letsencrypt
-# COPY /letsencrypt /usr/local/letsencrypt
 
 RUN wget -q -O /etc/ssl/nginx/CA.crt https://cs.nginx.com/static/files/CA.crt && \
 	wget -q -O - http://nginx.org/keys/nginx_signing.key | apt-key add - && \
@@ -46,7 +44,7 @@ RUN wget -q -O /etc/ssl/nginx/CA.crt https://cs.nginx.com/static/files/CA.crt &&
 	printf "deb https://plus-pkgs.nginx.com/debian `lsb_release -cs` nginx-plus\n" >/etc/apt/sources.list.d/nginx-plus.list
 
 #Install NGINX Plus
-RUN apt-get update && apt-get install -y apt-transport-https nginx-plus-extras
+RUN apt-get update && apt-get install -y apt-transport-https nginx-plus
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
@@ -58,7 +56,11 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx-gz.conf /etc/nginx/
 COPY ./nginx-ssl.conf /etc/nginx/
 
-RUN API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' HOSTNAME='mesos-user-manager' sh ./amplify_install.sh
+COPY ./status.html /usr/share/nginx/html/status.html
+
+# Install Amplify
+RUN curl -sS -L -O  https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh && \
+	API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' AMPLIFY_HOSTNAME='mesos-user-manager' sh ./install.sh
 
 CMD ["./start.sh"]
 
