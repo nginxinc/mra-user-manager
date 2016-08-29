@@ -1,4 +1,3 @@
----
 swagger: "2.0"
 info:
   description: "NGRA User Management API"
@@ -11,12 +10,13 @@ info:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 basePath: "/v1"
-schemes:
-- "https"
 paths:
   /:
     get:
       operationId: "app.healthcheck"
+      responses:
+        default:
+          description: "successful operation"
   /users:
     post:
       tags:
