@@ -1,0 +1,7 @@
+name: user-manager
+resolver:
+  host: 10.255.3.14
+  ttl: 1s
+external_domain_name: mra.nginxps.com
+#internal_domain_name: internal.ec2
+internal_domain_name: marathon.mesos
