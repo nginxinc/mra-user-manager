@@ -1,5 +1,5 @@
 tag = ngrefarch/user-manager
-volumes = -v $(CURDIR):/usr/src/app -v $(CURDIR)/nginx.conf:/etc/nginx/nginx.conf
+volumes = -v $(CURDIR):/usr/src/app
 ports = -p 443:443 -p 80:80
 env = --env-file=.env
 

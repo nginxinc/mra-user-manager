@@ -1,4 +1,5 @@
 name: user-manager
+root: /usr/src/app
 resolver:
   host: 10.255.3.14
   ttl: 1s

@@ -56,7 +56,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 
 VOLUME ["/var/cache/nginx"]
 
-COPY ./nginx /etc/nginx/
+COPY nginx /etc/nginx/
 
 COPY ./status.html /usr/share/nginx/html/status.html
 
@@ -68,6 +68,11 @@ COPY . /usr/src/app
 # Install Amplify
 RUN curl -sS -L -O  https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh && \
 	API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' AMPLIFY_HOSTNAME='mesos-user-manager' sh ./install.sh
+
+# Install and run NGINX config generator
+RUN wget -q https://s3-us-west-1.amazonaws.com/fabric-model/config-generator/generate_config
+RUN chmod +x generate_config && \
+   ./generate_config -p /etc/nginx/fabric_config.yaml > /etc/nginx/nginx-fabric.conf
 
 CMD ["./start.sh"]
 
