@@ -5,6 +5,7 @@ import connexion
 import logging
 import uuid
 import os
+import requests
 
 from flask import abort, g
 
@@ -16,17 +17,24 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
+
 def healthcheck():
-    return ('', 204)
+    return '', 204
+
 
 def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
+    if __name__ == '__main__':
+        db = getattr(g, '_database', None)
+        if db is None:
+            db = g._database = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
+    else:
+        db = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
     return db
 
+
 def get_users_table():
-    return get_db().Table('users')
+    return get_db().Table('users')  # dynamodb.Table(name='users')
+
 
 def get_user_by_index_and_key(index, key, id):
     response = get_users_table().query(
@@ -40,12 +48,28 @@ def get_user_by_index_and_key(index, key, id):
     item = response['Items'][0]
     return item
 
+
 def create_user(body) -> str:
     body['id'] = str(uuid.uuid4())
 
     get_users_table().put_item(Item=body)
 
+    url = 'http://album-manager.mra.nginxps.com/albums'
+    headers = {'Auth-ID': body['id']}
+
+    data = {'album[name]': 'Profile Pictures'}
+    r = requests.post(url, headers=headers, data=data)
+    pp_r = r.json()
+
+    data = {'album[name]': 'Cover Pictures'}
+    r = requests.post(url, headers=headers, data=data)
+    cv_r = r.json()
+
+    body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id'])}
+    update_user(body['id'], body_albums_ids)
+
     return body
+
 
 def get_user_by_id(id) -> str:
     response = get_users_table().get_item(Key={'id': id})
@@ -55,11 +79,14 @@ def get_user_by_id(id) -> str:
 
     return response['Item']
 
+
 def get_user_by_facebook_id(id) -> str:
     return get_user_by_index_and_key('facebook_id-index', 'facebook_id', id)
 
+
 def get_user_by_google_id(id) -> str:
     return get_user_by_index_and_key('google_id-index', 'google_id', id)
+
 
 def update_user(id, body) -> str:
     item = get_user_by_id(id)
@@ -71,8 +98,11 @@ def update_user(id, body) -> str:
 
     return item
 
+
 def delete_user(id) -> str:
-    get_users_table().delete_item(Key={'id': id})
+    if get_user_by_id(id):
+        get_users_table().delete_item(Key={'id': id})
+
 
 logging.basicConfig(level=logging.DEBUG)
 app = connexion.App(__name__)

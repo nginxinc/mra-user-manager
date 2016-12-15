@@ -12,7 +12,7 @@ MarkupSafe==0.23
 newrelic==2.64.0.48
 ordereddict==1.1
 python-dateutil==2.4.2
-python-dotenv==0.3.0
+python-dotenv==0.6.0
 PyYAML==3.11
 requests==2.8.1
 six==1.10.0
