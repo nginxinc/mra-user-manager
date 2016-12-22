@@ -65,7 +65,7 @@ def create_user(body) -> str:
     r = requests.post(url, headers=headers, data=data)
     cv_r = r.json()
 
-    body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id'])}
+    body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id']), 'profile_picture_url': 'generic'}
     update_user(body['id'], body_albums_ids)
 
     return body
