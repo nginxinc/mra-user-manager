@@ -1,4 +1,4 @@
-tag = ngrefarch/user-manager
+tag = ngrefarch/user-manager:mesos
 volumes = -v $(CURDIR):/usr/src/app
 ports = -p 443:443 -p 80:80
 env = --env-file=.env
