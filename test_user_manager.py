@@ -11,6 +11,10 @@ class TestCreateUser(TestCase):
 
     def test_create_user(self, body=body):
         create_user(body)
+        user = get_user_by_id(body['id'])
+        body['profile_picture_url'] = 'generic'
+        body['profile_pictures_id'] = user['profile_pictures_id']
+        body['cover_pictures_id'] = user['cover_pictures_id']
         self.assertEquals(get_user_by_id(body['id']), body)
 
     def tearDown(self, body=body):
