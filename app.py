@@ -57,11 +57,11 @@ def create_user(body) -> str:
     url = 'http://album-manager.mra.nginxps.com/albums'
     headers = {'Auth-ID': body['id']}
 
-    data = {'album[name]': 'Profile Pictures'}
+    data = {'album[name]': 'Profile Pictures', 'album[state]': 'active'}
     r = requests.post(url, headers=headers, data=data)
     pp_r = r.json()
 
-    data = {'album[name]': 'Cover Pictures'}
+    data = {'album[name]': 'Cover Pictures', 'album[state]': 'active'}
     r = requests.post(url, headers=headers, data=data)
     cv_r = r.json()
 
