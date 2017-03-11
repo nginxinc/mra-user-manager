@@ -8,3 +8,5 @@ certificate.pem
 csr.pem
 dhparam.pem
 key.pem
+
+nginx-plus_1.11.8-0-trusty_amd64.deb
