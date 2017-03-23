@@ -1,7 +1,7 @@
 name: user-manager
 root: /usr/src/app
 resolver:
-  host: 10.255.3.14
+  host: 198.51.100.1 198.51.100.2 198.51.100.3
   ttl: 1s
 external_domain_name: mra.nginxps.com
 #internal_domain_name: internal.ec2
