@@ -26,10 +26,78 @@ def get_db():
     if __name__ == '__main__':
         db = getattr(g, '_database', None)
         if db is None:
-            db = g._database = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
+            db = g._database = boto3.resource('dynamodb', endpoint_url='http://dynamo-db.marathon.mesos:8000')
     else:
-        db = boto3.resource('dynamodb', region_name=os.environ.get('AWS_REGION'))
+        db = boto3.resource('dynamodb', endpoint_url='http://dynamo-db.marathon.mesos:8000')
     return db
+
+try:
+    client = boto3.client('dynamodb', endpoint_url="http://dynamo-db.marathon.mesos:8000")
+    response = client.describe_table(TableName='users')
+except:
+    table = get_db().create_table(
+        TableName='users',
+        KeySchema=[
+            {
+                'AttributeName': 'id',
+                'KeyType': 'HASH'
+            }
+        ],
+        AttributeDefinitions=[
+            {
+                'AttributeName': 'id',
+                'AttributeType': 'S'
+            },
+            {
+                'AttributeName': 'google_id',
+                'AttributeType': 'S'
+            },
+            {
+                'AttributeName': 'facebook_id',
+                'AttributeType': 'S'
+            }
+        ],
+        GlobalSecondaryIndexes=[
+            {
+                'IndexName': 'google_id-index',
+                'KeySchema': [
+                    {
+                        'AttributeName': 'google_id',
+                        'KeyType': 'HASH'
+                    },
+                ],
+                'Projection': {
+                    'ProjectionType': 'ALL',
+                },
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 5,
+                    'WriteCapacityUnits': 5
+                }
+            },
+            {
+                'IndexName': 'facebook_id-index',
+                'KeySchema': [
+                    {
+                        'AttributeName': 'facebook_id',
+                        'KeyType': 'HASH'
+                    },
+                ],
+                'Projection': {
+                    'ProjectionType': 'ALL',
+                },
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 5,
+                    'WriteCapacityUnits': 5
+                }
+            }
+        ],
+        ProvisionedThroughput={
+            'ReadCapacityUnits': 5,
+            'WriteCapacityUnits': 5
+        }
+    )
+
+    table.meta.client.get_waiter('table_exists').wait(TableName='users')
 
 
 def get_users_table():
