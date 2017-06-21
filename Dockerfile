@@ -34,9 +34,9 @@ ENV VAULT_TOKEN=4b9f8249-538a-d75a-e6d3-69f5355c1751 \
     VAULT_ADDR=http://vault.mra.nginxps.com:8200
 
 RUN mkdir -p /etc/ssl/nginx && \
-	  vault token-renew && \
-	  vault read -field=value secret/nginx-repo.crt > /etc/ssl/nginx/nginx-repo.crt && \
-	  vault read -field=value secret/nginx-repo.key > /etc/ssl/nginx/nginx-repo.key && \
+    vault token-renew && \
+    vault read -field=value secret/nginx-repo.crt > /etc/ssl/nginx/nginx-repo.crt && \
+    vault read -field=value secret/nginx-repo.key > /etc/ssl/nginx/nginx-repo.key && \
     vault read -field=value secret/ssl/csr.pem > /etc/ssl/nginx/csr.pem && \
     vault read -field=value secret/ssl/certificate.pem > /etc/ssl/nginx/certificate.pem && \
     vault read -field=value secret/ssl/key.pem > /etc/ssl/nginx/key.pem && \

@@ -25,5 +25,4 @@ while [ -f "$NGINX_PID" ] &&  [ "$APP_PID" ];
 do 
 	sleep 5;
 	APP_PID=`ps aux | grep $APP | grep -v grep`;
-	#echo "The python process: $PID"
 done
