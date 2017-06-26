@@ -14,6 +14,13 @@ from boto3.dynamodb.conditions import Key
 from os.path import join, dirname
 from dotenv import load_dotenv
 
+#
+#  app.py
+#  UserManager
+#
+#  Copyright © 2017 NGINX Inc. All rights reserved.
+#
+
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 db_endpoint = os.environ.get('DB_ENDPOINT')
