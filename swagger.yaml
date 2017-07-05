@@ -4,8 +4,8 @@ info:
   version: "1.0.0"
   title: "NGRA User Management API"
   contact:
-    name: "Ben Horowitz"
-    email: "ben.horowitz@nginx.com"
+    name: "Charles Pretzer"
+    email: "charles.pretzer@nginx.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
