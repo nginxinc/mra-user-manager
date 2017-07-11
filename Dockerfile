@@ -1,5 +1,8 @@
 FROM python:3.5.1
 
+ENV USE_NGINX_PLUS true
+ENV AMPLIFY_KEY ''
+
 # Set the debconf front end to Noninteractive
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 
@@ -42,13 +45,9 @@ RUN mkdir -p /etc/ssl/nginx && \
     vault read -field=value secret/ssl/key.pem > /etc/ssl/nginx/key.pem && \
     vault read -field=value secret/ssl/dhparam.pem > /etc/ssl/nginx/dhparam.pem
 
-RUN wget -q -O /etc/ssl/nginx/CA.crt https://cs.nginx.com/static/files/CA.crt && \
-    wget -q -O - http://nginx.org/keys/nginx_signing.key | apt-key add - && \
-    wget -q -O /etc/apt/apt.conf.d/90nginx https://cs.nginx.com/static/files/90nginx && \
-    printf "deb https://plus-pkgs.nginx.com/debian `lsb_release -cs` nginx-plus\n" | tee /etc/apt/sources.list.d/nginx-plus.list
-
-#Install NGINX Plus
-RUN apt-get update && apt-get install -y apt-transport-https nginx-plus
+# Install nginx
+ADD install-nginx.sh /usr/local/bin/
+RUN /usr/local/bin/install-nginx.sh
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
@@ -64,10 +63,6 @@ COPY requirements.txt /usr/src/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app
-
-# Install Amplify
-RUN curl -sS -L -O  https://github.com/nginxinc/nginx-amplify-agent/raw/master/packages/install.sh && \
-	API_KEY='0202c79a3d8411fcf82b35bc3d458f7e' AMPLIFY_HOSTNAME='mesos-user-manager' sh ./install.sh
 
 # Install and run NGINX config generator
 RUN wget -q https://s3-us-west-1.amazonaws.com/fabric-model/config-generator/generate_config
