@@ -27,13 +27,9 @@ WORKDIR /usr/src/app
 RUN wget -q https://releases.hashicorp.com/vault/0.6.0/vault_0.6.0_linux_amd64.zip && \
 	  unzip -d /usr/local/bin vault_0.6.0_linux_amd64.zip
 COPY ./requirements.txt /usr/src/app/
-RUN pip install -r requirements.txt
-
-# Download certificate and key from the the vault and copy to the build context
-ENV VAULT_TOKEN=4b9f8249-538a-d75a-e6d3-69f5355c1751 \
-    VAULT_ADDR=http://vault.mra.nginxps.com:8200
-
-RUN mkdir -p /etc/ssl/nginx && \
+RUN pip install -r requirements.txt && \
+    . /etc/letsencrypt/vault_env.sh && \
+    mkdir -p /etc/ssl/nginx && \
     vault token-renew && \
     vault read -field=value secret/nginx-repo.crt > /etc/ssl/nginx/nginx-repo.crt && \
     vault read -field=value secret/nginx-repo.key > /etc/ssl/nginx/nginx-repo.key && \
