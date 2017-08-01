@@ -16,8 +16,6 @@ $APP
 
 nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;"
 
-service amplify-agent start
-
 sleep 30
 APP_PID=`ps aux | grep $APP | grep -v grep`
 
