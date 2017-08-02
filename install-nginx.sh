@@ -2,6 +2,7 @@
 
 wget -O /usr/local/sbin/generate_config -q https://s3-us-west-1.amazonaws.com/fabric-model/config-generator/generate_config
 chmod +x /usr/local/sbin/generate_config
+. /etc/letsencrypt/vault_env.sh
 
 # Download certificate and key from the the vault and copy to the build context
 vault token-renew

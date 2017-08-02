@@ -1,14 +1,12 @@
 FROM python:3.5.1
 
-ENV USE_NGINX_PLUS=true \
-    VAULT_TOKEN=4b9f8249-538a-d75a-e6d3-69f5355c1751 \
-    VAULT_ADDR=http://vault.mra.nginxps.com:8200
+ENV USE_NGINX_PLUS=true
 
+COPY vault_env.sh /etc/letsencrypt/
 # Set the debconf front end to Noninteractive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
 # persistent / runtime deps
-RUN apt-get update && apt-get install -y \
+    apt-get update && apt-get install -y \
 	jq \
 	libffi-dev \
 	libssl-dev \
