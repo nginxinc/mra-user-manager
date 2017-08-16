@@ -2,7 +2,7 @@ FROM python:3.5.1
 
 ENV USE_NGINX_PLUS=true \
     USE_VAULT=true \
-    USE_LOCAL=true
+    USE_LOCAL=false
 
 
 COPY nginx/ssl /etc/ssl/nginx/
