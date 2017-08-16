@@ -1,7 +1,7 @@
 {% macro location(name) -%}
   location /{{ name }}/ {
-    proxy_pass https://{{ name }}.oss/;
-    proxy_set_header Host {{ name }}.oss.{{internal_domain_name}};
+    proxy_pass https://{{ name }}/;
+    proxy_set_header Host {{ name }}{% if internal_domain_name != None %}.{{internal_domain_name}}{% endif %};
 
     proxy_ssl_session_reuse     on;
     proxy_ssl_protocols         TLSv1.2;
@@ -45,8 +45,8 @@ http {
 
   {% if services %}
       {% for name, service in services.iteritems() %}
-      upstream {{ name }}.oss {
-        server          {{ name }}.oss.{{ service.server }}:{{ service.oss_port }};
+      upstream {{ name }} {
+        server          {{ name }}.{{ service.server }}:{{ service.port }};
         zone backend    64k;
         keepalive       300;
       }
