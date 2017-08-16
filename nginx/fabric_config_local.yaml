@@ -1,0 +1,5 @@
+name: user-manager
+root: /usr/src/app
+resolver:
+  host: 127.0.0.11
+  ttl: 1s
