@@ -2,8 +2,12 @@ FROM python:3.5.1
 
 ENV USE_NGINX_PLUS=true \
     USE_VAULT=true \
-    USE_LOCAL=false
-
+# CONTAINER_ENGINE specifies the container engine to which the
+# containers will be deployed. Valid values are:
+# - kubernetes
+# - mesos
+# - local
+    CONTAINER_ENGINE=kubernetes
 
 COPY nginx/ssl /etc/ssl/nginx/
 COPY vault_env.sh /etc/letsencrypt/
