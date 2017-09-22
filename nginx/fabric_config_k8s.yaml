@@ -1,0 +1,7 @@
+name: user-manager
+root: /usr/src/app
+resolver:
+  host: kube-dns.kube-system.svc.cluster.local
+  ttl: 1s
+external_domain_name: k8s.mra.nginxps.com
+internal_domain_name: nginx-mra.svc.cluster.local
