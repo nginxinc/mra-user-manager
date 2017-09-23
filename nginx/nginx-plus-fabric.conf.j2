@@ -19,7 +19,11 @@
   }
 {%- endmacro %}
 
-error_log /var/log/nginx/error.log debug;
+{% if log_to_syslog %}
+error_log {{ syslog_error_log_location }};
+{% else %}
+error_log {{ error_log_location }};
+{% endif %}
 worker_processes  auto;
 
 events {
@@ -35,6 +39,31 @@ http {
   resolver {{ resolver.host }} valid={{ resolver.ttl }};  #use local DNS and override TTL to whatever value makes sense
   resolver_timeout 2s;
   client_max_body_size 30M;
+
+    {% if log_to_syslog %}
+        log_format json '{"service_name": "{{ service_log_name }}",'
+             '"time": "$time_iso8601", '
+             '"remote_addr": "$remote_addr", '
+             '"remote_user": "$remote_user", '
+             '"body_bytes_sent": $body_bytes_sent, '
+             '"request_time": $request_time, '
+             '"status": $status, '
+             '"request": "$request", '
+             '"request_method": "$request_method", '
+             '"http_referrer": "$http_referer", '
+             '"http_x_forwarded_for": "$http_x_forwarded_for", '
+             '"http_user_agent": "$http_user_agent"}';
+    {% else %}
+        log_format main {{ service_log_name }} '$remote_addr - $remote_user [$time_local] "$request" '
+              '$status $body_bytes_sent "$http_referer" '
+              '"$http_user_agent" "$http_x_forwarded_for"';
+    {% endif %}
+
+    {% if log_to_syslog %}
+        access_log {{ syslog_access_log_location }};
+    {% else %}
+        access_log {{ access_log_location }};
+    {% endif %}
 
   {% if services %}
     {% for name, service in services.iteritems() %}
