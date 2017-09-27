@@ -97,6 +97,22 @@ except:
                     'ReadCapacityUnits': 5,
                     'WriteCapacityUnits': 5
                 }
+            },
+            {
+                'IndexName': 'email_address-index',
+                'KeySchema': [
+                    {
+                        'AttributeName': 'email',
+                        'KeyType': 'HASH'
+                    },
+                ],
+                'Projection': {
+                    'ProjectionType': 'ALL',
+                },
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 5,
+                    'WriteCapacityUnits': 5
+                }
             }
         ],
         ProvisionedThroughput={
@@ -162,6 +178,26 @@ def get_user_by_facebook_id(id) -> str:
 
 def get_user_by_google_id(id) -> str:
     return get_user_by_index_and_key('google_id-index', 'google_id', id)
+
+
+def get_user_by_email(email) -> str:
+    return get_user_by_index_and_key('email_address-index', 'email', email)
+
+
+def auth_local_user(body) -> str:
+    email = body['email']
+    password = body['password']
+
+    logging.info("looking for email: " + email + " and password " + password)
+
+    if email and password:
+        user = get_user_by_email(email)
+        logging.info("got user: " + user)
+        if user:
+            logging.info("comparing: " + password)
+            body['authenticated'] = password == user['password']
+
+    return body
 
 
 def update_user(id, body) -> str:
