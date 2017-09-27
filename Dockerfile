@@ -1,13 +1,13 @@
 FROM python:3.5.1
 
 ENV USE_NGINX_PLUS=true \
-    USE_VAULT=true \
+    USE_VAULT=false \
 # CONTAINER_ENGINE specifies the container engine to which the
 # containers will be deployed. Valid values are:
 # - kubernetes
 # - mesos
 # - local
-    CONTAINER_ENGINE=kubernetes
+#    CONTAINER_ENGINE=kubernetes
 
 COPY nginx/ssl /etc/ssl/nginx/
 COPY vault_env.sh /etc/letsencrypt/
@@ -39,8 +39,8 @@ WORKDIR /usr/src/app
 RUN pip install --no-cache-dir -r requirements.txt && \
     /usr/local/bin/install-nginx.sh && \
 # forward request and error logs to docker log collector
-    ln -sf /dev/stdout /var/log/nginx/access.log && \
-	ln -sf /dev/stderr /var/log/nginx/error.log
+    ln -sf /dev/stdout /var/log/nginx/access_log && \
+	ln -sf /dev/stderr /var/log/nginx/error_log
 
 VOLUME ["/var/cache/nginx"]
 
