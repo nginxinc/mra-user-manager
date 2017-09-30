@@ -24,7 +24,7 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 db_endpoint = os.environ.get('DB_ENDPOINT')
-
+verify_certs = os.environ.get('VERIFY_CERTS') != 'False'
 
 def healthcheck():
     return '', 204
@@ -62,6 +62,10 @@ except:
             },
             {
                 'AttributeName': 'facebook_id',
+                'AttributeType': 'S'
+            },
+            {
+                'AttributeName': 'email',
                 'AttributeType': 'S'
             }
         ],
@@ -135,7 +139,7 @@ def get_user_by_index_and_key(index, key, id):
     )
 
     if not response['Items']:
-        abort(404)
+        return None
 
     item = response['Items'][0]
     return item
@@ -150,11 +154,11 @@ def create_user(body) -> str:
     headers = {'Auth-ID': body['id']}
 
     data = {'album[name]': 'Profile Pictures', 'album[state]': 'active'}
-    r = requests.post(url, headers=headers, data=data)
+    r = requests.post(url, headers=headers, data=data, verify=verify_certs)
     pp_r = r.json()
 
     data = {'album[name]': 'Cover Pictures', 'album[state]': 'active'}
-    r = requests.post(url, headers=headers, data=data)
+    r = requests.post(url, headers=headers, data=data, verify=verify_certs)
     cv_r = r.json()
 
     body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id']), 'profile_picture_url': 'generic'}
@@ -173,22 +177,36 @@ def get_user_by_id(id) -> str:
 
 
 def get_user_by_facebook_id(id) -> str:
-    return get_user_by_index_and_key('facebook_id-index', 'facebook_id', id)
+    result = get_user_by_index_and_key('facebook_id-index', 'facebook_id', id)
+
+    if result is None:
+        abort(404)
+
+    return result
 
 
 def get_user_by_google_id(id) -> str:
-    return get_user_by_index_and_key('google_id-index', 'google_id', id)
+    result = get_user_by_index_and_key('google_id-index', 'google_id', id)
+
+    if result is None:
+        abort(404)
+
+    return result
 
 
 def get_user_by_email(email) -> str:
-    return get_user_by_index_and_key('email_address-index', 'email', email)
+    result = get_user_by_index_and_key('email_address-index', 'email', email)
+
+    if result is None:
+        result = {}
+        result['found'] = False
+
+    return result
 
 
 def auth_local_user(body) -> str:
     email = body['email']
     password = body['password']
-
-    logging.info("looking for email: " + email + " and password " + password)
 
     if email and password:
         user = get_user_by_email(email)

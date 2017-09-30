@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "NGRA User Management API"
   version: "1.0.0"
-  title: "NGRA User Management API"
+  title: "MRA User Management API"
   contact:
     name: "Charles Pretzer"
     email: "charles.pretzer@nginx.com"
@@ -126,7 +126,7 @@ paths:
       - "user"
       summary: "Get user by email address"
       description: ""
-      operationId: "app.get_user_by_email"
+      operationId: "app.auth_local_user"
       produces:
       - "application/json"
       parameters:
@@ -147,7 +147,7 @@ paths:
           description: "User not found for email address"
       x-tags:
       - tag: "user"
-      x-operationId: "get_user_by_email"
+      x-operationId: "auth_local_user"
   /users/{id}:
     get:
       tags:
@@ -238,4 +238,6 @@ definitions:
       google_id:
         type: "string"
       banner_album_id:
+        type: "string"
+      password:
         type: "string"
