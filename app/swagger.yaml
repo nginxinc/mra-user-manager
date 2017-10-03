@@ -93,6 +93,33 @@ paths:
       x-tags:
       - tag: "user"
       x-operationId: "get_user_by_google_id"
+  /users/local/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by local id"
+      description: ""
+      operationId: "app.get_user_by_local_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_local_id"
   /users/email/{email}:
     get:
       tags:
