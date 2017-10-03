@@ -13,6 +13,7 @@ from boto3.dynamodb.conditions import Key
 
 from os.path import join, dirname
 from dotenv import load_dotenv
+from werkzeug.security import generate_password_hash, check_password_hash
 
 #
 #  app.py
@@ -62,6 +63,10 @@ except:
             },
             {
                 'AttributeName': 'facebook_id',
+                'AttributeType': 'S'
+            },
+            {
+                'AttributeName': 'local_id',
                 'AttributeType': 'S'
             },
             {
@@ -117,6 +122,22 @@ except:
                     'ReadCapacityUnits': 5,
                     'WriteCapacityUnits': 5
                 }
+            },
+            {
+                'IndexName': 'local_id-index',
+                'KeySchema': [
+                    {
+                        'AttributeName': 'local_id',
+                        'KeyType': 'HASH'
+                    },
+                ],
+                'Projection': {
+                    'ProjectionType': 'ALL',
+                },
+                'ProvisionedThroughput': {
+                    'ReadCapacityUnits': 5,
+                    'WriteCapacityUnits': 5
+                }
             }
         ],
         ProvisionedThroughput={
@@ -148,6 +169,10 @@ def get_user_by_index_and_key(index, key, id):
 def create_user(body) -> str:
     body['id'] = str(uuid.uuid4())
 
+    if body['password'] is not None:
+        body['local_id'] = str(uuid.uuid4())
+        body['password'] = generate_password_hash(body['password'])
+
     get_users_table().put_item(Item=body)
 
     url = os.environ.get('ALBUM_MANAGER_URL')
@@ -162,7 +187,7 @@ def create_user(body) -> str:
     cv_r = r.json()
 
     body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id']), 'profile_picture_url': 'generic'}
-    update_user(body['id'], body_albums_ids)
+    body = update_user(body['id'], body_albums_ids)
 
     return body
 
@@ -194,12 +219,20 @@ def get_user_by_google_id(id) -> str:
     return result
 
 
+def get_user_by_local_id(id) -> str:
+    result = get_user_by_index_and_key('local_id-index', 'local_id', id)
+
+    if result is None:
+        abort(404)
+
+    return result
+
+
 def get_user_by_email(email) -> str:
     result = get_user_by_index_and_key('email_address-index', 'email', email)
 
     if result is None:
-        result = {}
-        result['found'] = False
+        result = {'found': False}
 
     return result
 
@@ -210,10 +243,8 @@ def auth_local_user(body) -> str:
 
     if email and password:
         user = get_user_by_email(email)
-        logging.info("got user: " + user)
         if user:
-            logging.info("comparing: " + password)
-            body['authenticated'] = password == user['password']
+            body['authenticated'] = check_password_hash(user['password'], password)
 
     return body
 
