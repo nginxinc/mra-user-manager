@@ -3,19 +3,17 @@
 wget -O /usr/local/sbin/generate_config -q https://s3-us-west-1.amazonaws.com/fabric-model/config-generator/generate_config
 chmod +x /usr/local/sbin/generate_config
 
+echo -e "\033[32m -----"
+echo -e "\033[32m Building for ${CONTAINER_ENGINE}"
+echo -e "\033[32m -----\033[0m"
+
 CONFIG_FILE=/etc/nginx/fabric_config.yaml
 
 case "$CONTAINER_ENGINE" in
     kubernetes)
-        echo -e "\033[32m -----"
-        echo -e "\033[32m Building for Kubernetes"
-        echo -e "\033[32m -----\033[0m"
         CONFIG_FILE=/etc/nginx/fabric_config_k8s.yaml
         ;;
     local)
-        echo -e "\033[32m -----"
-        echo -e "\033[32m Building for local"
-        echo -e "\033[32m -----\033[0m"
         CONFIG_FILE=/etc/nginx/fabric_config_local.yaml
         ;;
 esac
