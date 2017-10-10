@@ -169,7 +169,7 @@ def get_user_by_index_and_key(index, key, id):
 def create_user(body) -> str:
     body['id'] = str(uuid.uuid4())
 
-    if body['password'] is not None:
+    if 'password' in body:
         body['local_id'] = str(uuid.uuid4())
         body['password'] = generate_password_hash(body['password'])
 

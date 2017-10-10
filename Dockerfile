@@ -1,13 +1,14 @@
 FROM python:3.5.1
 
+ARG CONTAINER_ENGINE
 ENV USE_NGINX_PLUS=true \
     USE_VAULT=false \
 # CONTAINER_ENGINE specifies the container engine to which the
 # containers will be deployed. Valid values are:
 # - kubernetes
-# - mesos (default)
+# - mesos
 # - local
-#    CONTAINER_ENGINE=kubernetes
+    CONTAINER_ENGINE=${CONTAINER_ENGINE:-kubernetes}
 
 COPY nginx/ssl /etc/ssl/nginx/
 # Set the debconf front end to Noninteractive
