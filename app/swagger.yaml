@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: "NGRA User Management API"
   version: "1.0.0"
-  title: "NGRA User Management API"
+  title: "MRA User Management API"
   contact:
     name: "Charles Pretzer"
     email: "charles.pretzer@nginx.com"
@@ -93,6 +93,88 @@ paths:
       x-tags:
       - tag: "user"
       x-operationId: "get_user_by_google_id"
+  /users/local/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by local id"
+      description: ""
+      operationId: "app.get_user_by_local_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_local_id"
+  /users/email/{email}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by email address"
+      description: ""
+      operationId: "app.get_user_by_email"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "The email address of the user to fetch."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid email supplied"
+        404:
+          description: "User not found for email address"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_email"
+  /users/email/auth:
+    post:
+      tags:
+      - "user"
+      summary: "Get user by email address"
+      description: ""
+      operationId: "app.auth_local_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Authenticating user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid email supplied"
+        404:
+          description: "User not found for email address"
+      x-tags:
+      - tag: "user"
+      x-operationId: "auth_local_user"
   /users/{id}:
     get:
       tags:
@@ -183,4 +265,6 @@ definitions:
       google_id:
         type: "string"
       banner_album_id:
+        type: "string"
+      password:
         type: "string"

@@ -2,6 +2,11 @@
 NGINX_PID="/var/run/nginx.pid"    # /   (root directory)
 APP="uwsgi --ini uwsgi.ini"
 
+if [ "$DEV_MODE" = "true" ]
+then
+    APP="$APP --py-autoreload 5"
+fi
+
 NGINX_CONF="/etc/nginx/nginx.conf";
 
 if [ "$NETWORK" = "fabric" ]

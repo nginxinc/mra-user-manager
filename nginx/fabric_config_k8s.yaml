@@ -5,3 +5,9 @@ resolver:
   ttl: 1s
 external_domain_name: k8s.mra.nginxps.com
 internal_domain_name: nginx-mra.svc.cluster.local
+log_to_syslog : false
+syslog_error_log_location: "syslog:server=localhost:5544 debug"
+error_log_location: "/var/log/nginx/error_log debug"
+service_log_name: user_manager_mra
+syslog_access_log_location: "syslog:server=localhost:5544,facility=local6,tag=user_manager_mra,severity=info json"
+access_log_location: "/var/log/nginx/access_log combined"
