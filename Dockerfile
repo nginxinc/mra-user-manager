@@ -1,6 +1,6 @@
 FROM python:3.5.1
 
-ARG CONTAINER_ENGINE_ARG
+ARG CONTAINER_ENGINE
 ENV USE_NGINX_PLUS=true \
     USE_VAULT=false \
 # CONTAINER_ENGINE specifies the container engine to which the
@@ -8,7 +8,7 @@ ENV USE_NGINX_PLUS=true \
 # - kubernetes
 # - mesos
 # - local
-    CONTAINER_ENGINE=${CONTAINER_ENGINE_ARG:-kubernetes}
+    CONTAINER_ENGINE=${CONTAINER_ENGINE:-kubernetes}
 
 COPY nginx/ssl /etc/ssl/nginx/
 # Set the debconf front end to Noninteractive
