@@ -7,16 +7,10 @@ then
     APP="$APP --py-autoreload 5"
 fi
 
-NGINX_CONF="/etc/nginx/nginx.conf";
-
-if [ "$NETWORK" = "fabric" ]
-then
-    echo fabric configuration set;
-fi
-
+# start the application using UWSGI
 $APP 
 
-nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;"
+nginx -c "/etc/nginx/nginx.conf" -g "pid $NGINX_PID;"
 
 sleep 30
 APP_PID=`ps aux | grep $APP | grep -v grep`

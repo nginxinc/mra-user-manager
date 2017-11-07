@@ -1,4 +1,4 @@
-FROM python:3.5.1
+FROM ngrefarch/python_base:3.5
 
 ARG CONTAINER_ENGINE_ARG
 ENV USE_NGINX_PLUS=true \
@@ -11,25 +11,6 @@ ENV USE_NGINX_PLUS=true \
     CONTAINER_ENGINE=${CONTAINER_ENGINE_ARG:-kubernetes}
 
 COPY nginx/ssl /etc/ssl/nginx/
-# Set the debconf front end to Noninteractive
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-# persistent / runtime deps
-    apt-get update && apt-get install -y \
-	jq \
-	libffi-dev \
-	libssl-dev \
-	make \
-	wget \
-	apt-transport-https \
-	ca-certificates \
-	curl \
-	librecode0 \
-	libsqlite3-0 \
-	libxml2 \
-	lsb-release \
-	unzip \
-	--no-install-recommends && rm -r /var/lib/apt/lists/*
-#	mkdir -p /usr/src/app
 
 COPY ./app /usr/src/app
 COPY nginx /etc/nginx/
