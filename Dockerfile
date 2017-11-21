@@ -3,7 +3,7 @@ FROM ngrefarch/python_base:3.5
 ARG CONTAINER_ENGINE_ARG
 ENV USE_NGINX_PLUS=true \
     USE_VAULT=false \
-# CONTAINER_ENGINE specifies the container engine to which the
+# CONTAINER_ENGINE_ARG specifies the container engine to which the
 # containers will be deployed. Valid values are:
 # - kubernetes
 # - mesos
