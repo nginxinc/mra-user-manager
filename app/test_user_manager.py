@@ -2,13 +2,16 @@ from unittest import TestCase
 
 from werkzeug.exceptions import NotFound
 
-import json
-
 from mock import patch
+from os.path import join, dirname
+from dotenv import load_dotenv
 
 import boto3
 
 from requests.models import Response
+
+dotenv_path = join(dirname(__file__), '.env_test')
+load_dotenv(dotenv_path)
 
 from app import create_user, get_user_by_id, get_user_by_facebook_id, get_user_by_google_id, delete_user, \
     get_users_table, update_user, get_db
