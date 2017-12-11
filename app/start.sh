@@ -1,14 +1,15 @@
 #!/bin/sh
 NGINX_PID="/var/run/nginx.pid"    # /   (root directory)
 APP="uwsgi --ini uwsgi.ini"
+DEBUG=""
 
 if [ "$DEV_MODE" = "true" ]
 then
-    APP="$APP --py-autoreload 5"
+    DEBUG=" --py-autoreload 5"
 fi
 
 # start the application using UWSGI
-$APP 
+$APP $DEBUG
 
 nginx -c "/etc/nginx/nginx.conf" -g "pid $NGINX_PID;"
 
