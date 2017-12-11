@@ -54,124 +54,128 @@ def get_db():
     if __name__ == '__main__':
         db = getattr(g, '_database', None)
         if db is None:
-            db = g._database = boto3.resource('dynamodb', endpoint_url=db_endpoint)
+            db = g._database = boto3.resource('dynamodb', region_name='us-west-1', endpoint_url=db_endpoint)
     else:
-        db = boto3.resource('dynamodb', endpoint_url=db_endpoint)
+        db = boto3.resource('dynamodb', region_name='us-west-1', endpoint_url=db_endpoint)
     return db
-
-try:
-    client = boto3.client('dynamodb', endpoint_url=db_endpoint)
-    response = client.describe_table(TableName='users')
-except:
-    table = get_db().create_table(
-        TableName='users',
-        KeySchema=[
-            {
-                'AttributeName': 'id',
-                'KeyType': 'HASH'
-            }
-        ],
-        AttributeDefinitions=[
-            {
-                'AttributeName': 'id',
-                'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'google_id',
-                'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'facebook_id',
-                'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'local_id',
-                'AttributeType': 'S'
-            },
-            {
-                'AttributeName': 'email',
-                'AttributeType': 'S'
-            }
-        ],
-        GlobalSecondaryIndexes=[
-            {
-                'IndexName': 'google_id-index',
-                'KeySchema': [
-                    {
-                        'AttributeName': 'google_id',
-                        'KeyType': 'HASH'
-                    },
-                ],
-                'Projection': {
-                    'ProjectionType': 'ALL',
-                },
-                'ProvisionedThroughput': {
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
-            },
-            {
-                'IndexName': 'facebook_id-index',
-                'KeySchema': [
-                    {
-                        'AttributeName': 'facebook_id',
-                        'KeyType': 'HASH'
-                    },
-                ],
-                'Projection': {
-                    'ProjectionType': 'ALL',
-                },
-                'ProvisionedThroughput': {
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
-            },
-            {
-                'IndexName': 'email_address-index',
-                'KeySchema': [
-                    {
-                        'AttributeName': 'email',
-                        'KeyType': 'HASH'
-                    },
-                ],
-                'Projection': {
-                    'ProjectionType': 'ALL',
-                },
-                'ProvisionedThroughput': {
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
-            },
-            {
-                'IndexName': 'local_id-index',
-                'KeySchema': [
-                    {
-                        'AttributeName': 'local_id',
-                        'KeyType': 'HASH'
-                    },
-                ],
-                'Projection': {
-                    'ProjectionType': 'ALL',
-                },
-                'ProvisionedThroughput': {
-                    'ReadCapacityUnits': 5,
-                    'WriteCapacityUnits': 5
-                }
-            }
-        ],
-        ProvisionedThroughput={
-            'ReadCapacityUnits': 5,
-            'WriteCapacityUnits': 5
-        }
-    )
-
-    table.meta.client.get_waiter('table_exists').wait(TableName='users')
 
 
 #
 # Get the users table from the database
+# TODO: This is a hack. We will clean this up in v2. For the purposes of a
+# reference application, we check for the able and create it if it doesn't
+# exist. Production grade services should remove this logic in favor of
+# a proper script to create the table
 #
 def get_users_table():
+
+    try:
+        return get_db().Table('users')
+    except:
+        table = get_db().create_table(
+            TableName='users',
+            KeySchema=[
+                {
+                    'AttributeName': 'id',
+                    'KeyType': 'HASH'
+                }
+            ],
+            AttributeDefinitions=[
+                {
+                    'AttributeName': 'id',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'google_id',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'facebook_id',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'local_id',
+                    'AttributeType': 'S'
+                },
+                {
+                    'AttributeName': 'email',
+                    'AttributeType': 'S'
+                }
+            ],
+            GlobalSecondaryIndexes=[
+                {
+                    'IndexName': 'google_id-index',
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'google_id',
+                            'KeyType': 'HASH'
+                        },
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL',
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                },
+                {
+                    'IndexName': 'facebook_id-index',
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'facebook_id',
+                            'KeyType': 'HASH'
+                        },
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL',
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                },
+                {
+                    'IndexName': 'email_address-index',
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'email',
+                            'KeyType': 'HASH'
+                        },
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL',
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                },
+                {
+                    'IndexName': 'local_id-index',
+                    'KeySchema': [
+                        {
+                            'AttributeName': 'local_id',
+                            'KeyType': 'HASH'
+                        },
+                    ],
+                    'Projection': {
+                        'ProjectionType': 'ALL',
+                    },
+                    'ProvisionedThroughput': {
+                        'ReadCapacityUnits': 5,
+                        'WriteCapacityUnits': 5
+                    }
+                }
+            ],
+            ProvisionedThroughput={
+                'ReadCapacityUnits': 5,
+                'WriteCapacityUnits': 5
+            }
+        )
+    
+        table.meta.client.get_waiter('table_exists').wait(TableName='users')
+
     return get_db().Table('users')
 
 
