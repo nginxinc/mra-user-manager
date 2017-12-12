@@ -30,4 +30,4 @@ COPY ./app/status.html /usr/share/nginx/html/status.html
 
 EXPOSE 80 443
 
-CMD ["/app/start.sh"]
+CMD ["/usr/src/app/start.sh"]
