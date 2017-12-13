@@ -25,7 +25,7 @@ class TestCreateUser(TestCase):
                 'profile_picture_url': 'generic', 'id': arguments['Key']['id'], 'name': 'NAME', 'cover_pictures_id': '169'}}
 
     def create_resource():
-        return boto3.resource('dynamodb')
+        return boto3.resource('dynamodb', region_name='us-west-1')
 
     def post_request(url, data, headers, verify):
         the_response = Response()
