@@ -69,10 +69,9 @@ def get_db():
 #
 def get_users_table():
 
+    client = get_db()
     try:
-        return get_db().Table('users')
-    except:
-        table = get_db().create_table(
+        table = client.create_table(
             TableName='users',
             KeySchema=[
                 {
@@ -173,10 +172,15 @@ def get_users_table():
                 'WriteCapacityUnits': 5
             }
         )
-    
-        table.meta.client.get_waiter('table_exists').wait(TableName='users')
 
-    return get_db().Table('users')
+        table.meta.client.get_waiter('table_exists').wait(TableName='users')
+    except Exception as e:
+        if e.response['Error']['Code'] == 'ResourceInUseException':
+            logging.debug('======= looking for users table: already exists')
+        else:
+            logging.error('Unable to process error', e)
+
+    return client.Table('users')
 
 
 #
