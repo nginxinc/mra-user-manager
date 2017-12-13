@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import boto3
+import botocore
 import connexion
 import logging
 import uuid
@@ -173,9 +174,19 @@ def get_users_table():
             }
         )
 
-        table.meta.client.get_waiter('table_exists').wait(TableName='users')
+        logging.debug("+++++++++ table: " + str(table))
+
+        if table is not None and len(table) > 0:
+            table.meta.client.get_waiter('table_exists').wait(TableName='users')
+            
     except Exception as e:
-        if e.response['Error']['Code'] == 'ResourceInUseException':
+        logging.error('===== error is', e)
+
+        if e is AttributeError:
+            logging.error('++++++ attribute error', e);
+
+        if e is botocore.exceptions.ClientError and 'Error' in e.response and \
+                e.response['Error']['Code'] == 'ResourceInUseException':
             logging.debug('======= looking for users table: already exists')
         else:
             logging.error('Unable to process error', e)
