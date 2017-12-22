@@ -6,6 +6,5 @@ env
 .DS_Store
 certificate.pem
 csr.pem
-dhparam.pem
 key.pem
 vault_env.sh
