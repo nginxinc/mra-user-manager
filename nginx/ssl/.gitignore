@@ -3,5 +3,4 @@ nginx-repo.key
 csr.pem
 certificate.pem
 key.pem
-dhparam.pem
 vault_env.sh
