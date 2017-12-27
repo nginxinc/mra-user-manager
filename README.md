@@ -121,7 +121,7 @@ The [install-nginx.sh](install-nginx.sh) file uses this value to determine which
 
 ### 4. Build the image
 
-Replace _&lt;your-image-repo-name&gt;_ for the username for where you store your Docker images, and execute the command below to build the image. The _&lt;tag&gt;_ argument is optional and defaults to **latest**
+Replace _&lt;your-image-repo-name&gt;_ with the username for where you store your Docker images, and execute the command below to build the image. The _&lt;tag&gt;_ argument is optional and defaults to **latest**
 
 ```
 docker build . -t <your-image-repo-name>/user-manager:<tag>
