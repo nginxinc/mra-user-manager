@@ -14,8 +14,8 @@ the User Manager service is not meant to function as a standalone service. Once 
 to a container engine along with the other components of the _Ingenious_ application, and then the application will be 
 accessible via your browser. 
 
-There are detailed instructions about the service below, and in order to get started quickly, you can follow these simple 
-instructions to quickly build the image.  
+There are detailed instructions for building the service below, and in order to get started quickly, you can follow these simple 
+instructions to quickly build the image.
 
 0. (Optional) If you don't already have an NGINX Plus license, you can request a temporary developer license 
 [here](https://www.nginx.com/developer-license/ "Developer License Form"). If you do have a license, then skip to the next step. 
@@ -69,17 +69,12 @@ The [Dockerfile](Dockerfile) sets some ENV arguments which are used when the ima
 - **CONTAINER_ENGINE**  
     The container engine used to run the images in a container. _CONTAINER_ENGINE_ can be one of the following values
      - kubernetes (default): to run on Kubernetes
-     
         When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric_config_k8s.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
-             
      - mesos: to run on DC/OS
-     
         When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric_config.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
-                  
+        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)  
      - local: to run in containers on the machine where the repository has been cloned
-     
         When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric_config_local.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)                  
      
