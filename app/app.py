@@ -38,7 +38,7 @@ db_endpoint = os.environ.get('DB_ENDPOINT')
 #
 # For development, set an environment variable to disable HTTPS certificate verification
 #
-verify_certs = os.environ.get('VERIFY_CERTS') != 'False'
+verify_certs = os.environ.get('VERIFY_CERTS') != 'false'
 
 
 #

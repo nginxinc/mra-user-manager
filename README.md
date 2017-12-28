@@ -115,13 +115,15 @@ docker build . -t <your-image-repo-name>/user-manager:<tag>
 ### Runtime environment variables
 In order to run the image, some environment variables must be set so that they are available during runtime.
 
-| Variable Name         | Description                                               | Example Value                 |
-| --------------------- | --------------------------------------------------------- | ----------------------------- |
-| ALBUM_MANAGER_URL     |                                                           | http://localhost/album-manager|
-| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                       | ABCD1234ABCD1234ABCD1234      |
-| AWS_REGION            | The region where your S3 instance is running              | us-west-1                     |
-| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                | ABCD1234ABCD1234ABCD1234      |
-| DB_ENDPOINT           | The host of the DynamoDB instance                         | http://dynamo-db:8000         |
+| Variable Name         | Description                                                                               | Example Value                 |
+| --------------------- | ----------------------------------------------------------------------------------------- | ----------------------------- |
+| ALBUM_MANAGER_URL     |                                                                                           | http://localhost/album-manager|
+| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                       | ABCD1234ABCD1234ABCD1234      |
+| AWS_REGION            | The region where your S3 instance is running                                              | us-west-1                     |
+| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                                | ABCD1234ABCD1234ABCD1234      |
+| DB_ENDPOINT           | The host of the DynamoDB instance                                                         | http://dynamo-db:8000         |
+| DEV_MODE              | Monitor python modules to trigger reload (use only in development)                        | false                         |
+| VERIFY_CERTS          | For development, set an environment variable to disable HTTPS certificate verification    | false                         |
 
 ### Disclaimer
 In this service, the **nginx/ssl/dhparam.pem** file is provided for ease of setup. In production environments, it is highly recommended for secure key-exchange to replace this file with your own generated DH parameter.
