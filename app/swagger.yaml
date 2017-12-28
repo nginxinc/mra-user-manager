@@ -151,7 +151,7 @@ paths:
     post:
       tags:
       - "user"
-      summary: "Get user by email address"
+      summary: "Authenticate user"
       description: ""
       operationId: "app.auth_local_user"
       produces:

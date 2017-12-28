@@ -112,18 +112,33 @@ Replace _&lt;your-image-repo-name&gt;_ with the username for where you store you
 docker build . -t <your-image-repo-name>/user-manager:<tag>
 ```
 
-### Runtime environment variables
+### 5. Runtime environment variables
 In order to run the image, some environment variables must be set so that they are available during runtime.
 
-| Variable Name         | Description                                                                               | Example Value                 |
-| --------------------- | ----------------------------------------------------------------------------------------- | ----------------------------- |
-| ALBUM_MANAGER_URL     |                                                                                           | http://localhost/album-manager|
-| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                       | ABCD1234ABCD1234ABCD1234      |
-| AWS_REGION            | The region where your S3 instance is running                                              | us-west-1                     |
-| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                                | ABCD1234ABCD1234ABCD1234      |
-| DB_ENDPOINT           | The host of the DynamoDB instance                                                         | http://dynamo-db:8000         |
-| DEV_MODE              | Monitor python modules to trigger reload (use only in development)                        | false                         |
-| VERIFY_CERTS          | For development, set an environment variable to disable HTTPS certificate verification    | false                         |
+| Variable Name         | Description                                                                            | Example Value                 |
+| --------------------- | -------------------------------------------------------------------------------------- | ----------------------------- |
+| ALBUM_MANAGER_URL     |                                                                                        | http://localhost/album-manager|
+| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                    | ABCD1234ABCD1234ABCD1234      |
+| AWS_REGION            | The region where your S3 instance is running                                           | us-west-1                     |
+| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                             | ABCD1234ABCD1234ABCD1234      |
+| DB_ENDPOINT           | The host of the DynamoDB instance                                                      | http://dynamo-db:8000         |
+| DEV_MODE              | Monitor python modules to trigger reload (use only in development)                     | false                         |
+| VERIFY_CERTS          | For development, set an environment variable to disable HTTPS certificate verification | false                         |
+
+### 6. Service Endpoints
+
+| Method | Endpoint             | Description             | Parameters              |
+| ------ | -------------------- | ----------------------- | ----------------------- |
+| GET    | /                    | Succesful operation     |                         |
+| POST   | /users               | Creates user            | body - user information |
+| GET    | /users/facebook/{id} | Get user by Facebook id | id - id for user        |
+| GET    | /users/google/{id}   | Get user by Google id   | id - id for user        |
+| GET    | /users/local/{id}    | Get user by local id    | id - id for user        |
+| GET    | /users/email/{email} | Get user by email       | email - email of user   |
+| POST   | /users/email/auth    | Authenticate user       | body - user information |
+| GET    | /users/{id}          | Get user by user id     | id - id for user        |
+| PUT    | /users/{id}          | Update user by user id  | id - id for user        |
+| DELETE | /users/{id}          | Delete user by user id  | id - id for user        |
 
 ### Disclaimer
 In this service, the **nginx/ssl/dhparam.pem** file is provided for ease of setup. In production environments, it is highly recommended for secure key-exchange to replace this file with your own generated DH parameter.
