@@ -1,5 +1,4 @@
 # NGINX Microservices Reference Architecture: User Manager Service
-
 This repository contains a Python application which is used to store and modify user information for the NGINX 
 _Ingenious_ application. The _Ingenious_ application has been developed by the NGINX Professional Services team to provide a 
 reference  architecture for building your own microservices based application using NGINX as the service mesh. 
@@ -15,8 +14,8 @@ the User Manager service is not meant to function as a standalone service. Once 
 to a container engine along with the other components of the _Ingenious_ application, and then the application will be 
 accessible via your browser. 
 
-There are detailed instructions about the service below, and in order to get started quickly, you can follow these simple 
-instructions to quickly build the image.  
+There are detailed instructions for building the service below, and in order to get started quickly, you can follow these simple 
+instructions to quickly build the image.
 
 0. (Optional) If you don't already have an NGINX Plus license, you can request a temporary developer license 
 [here](https://www.nginx.com/developer-license/ "Developer License Form"). If you do have a license, then skip to the next step. 
@@ -70,32 +69,23 @@ The [Dockerfile](Dockerfile) sets some ENV arguments which are used when the ima
 - **CONTAINER_ENGINE**  
     The container engine used to run the images in a container. _CONTAINER_ENGINE_ can be one of the following values
      - kubernetes (default): to run on Kubernetes
-     
         When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric_config_k8s.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
-             
      - mesos: to run on DC/OS
-     
         When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric_config.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
-                  
+        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)  
      - local: to run in containers on the machine where the repository has been cloned
-     
         When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric_config_local.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)                  
      
 ### 2. Decide whether to use NGINX Open Source or NGINX Plus
- 
 #### <a href="#" id="installing-nginx-oss"></a>Installing NGINX Open Source
-
 Set the _USE_NGINX_PLUS_ property to false in the [Dockerfile](Dockerfile)
-    
 #### <a href="#" id="installing-nginx-plus"></a>Installing NGINX Plus
 Before installing NGINX Plus, you'll need to obtain your license keys. If you do not already have a valid NGINX Plus subscription, you can request 
 developer licenses [here](https://www.nginx.com/developer-license/ "Developer License Form") 
 
 Set the _USE_NGINX_PLUS_ property to true in the [Dockerfile](Dockerfile)
-
 
 By default _USE_VAULT_ is set to false, and you must manually copy your **nginx-repo.crt** and **nginx-repo.key** 
 files to the **<path-to-repository>/mra-user-manager/nginx/ssl/** directory.
@@ -104,25 +94,20 @@ Download the **nginx-repo.crt** and **nginx-repo.key** files for your NGINX Plus
 ```
 cp nginx-repo.crt nginx-repo.key <repository>/nginx/ssl/
 ```
-
 If _USE_VAULT_ is set to true, you must have installed a vault server and written the contents of the **nginx-repo.crt**
 and **nginx-repo.key** file to vault server. Refer to the vault documentation for instructions configuring a vault server
 and adding values to it. 
 
 ### 3. Decide which container engine to use
-
 #### Set the _CONTAINER_ENGINE_ variable
 As described above, the _CONTAINER_ENGINE_ environment variable must be set to one of the following three options.
 The [install-nginx.sh](install-nginx.sh) file uses this value to determine which template file to use when populating the nginx.conf file.
-
 - kubernetes 
 - mesos 
 - local
 
 ### 4. Build the image
-
 Replace _&lt;your-image-repo-name&gt;_ with the username for where you store your Docker images, and execute the command below to build the image. The _&lt;tag&gt;_ argument is optional and defaults to **latest**
-
 ```
 docker build . -t <your-image-repo-name>/user-manager:<tag>
 ```
@@ -130,10 +115,20 @@ docker build . -t <your-image-repo-name>/user-manager:<tag>
 ### Runtime environment variables
 In order to run the image, some environment variables must be set so that they are available during runtime.
 
-| Variable Name         | Description                                               | Example Value                 |
-| --------------------- | --------------------------------------------------------- | ----------------------------- |
-| ALBUM_MANAGER_URL     |                                                           | http://localhost/album-manager|
-| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                       | ABCD1234ABCD1234ABCD1234      |
-| AWS_REGION            | The region where your S3 instance is running              | us-west-1                     |
-| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                | ABCD1234ABCD1234ABCD1234      |
-| DB_ENDPOINT           | The host of the DynamoDB instance                         | http://dynamo-db:8000         |
+| Variable Name         | Description                                                                               | Example Value                 |
+| --------------------- | ----------------------------------------------------------------------------------------- | ----------------------------- |
+| ALBUM_MANAGER_URL     |                                                                                           | http://localhost/album-manager|
+| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                       | ABCD1234ABCD1234ABCD1234      |
+| AWS_REGION            | The region where your S3 instance is running                                              | us-west-1                     |
+| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                                | ABCD1234ABCD1234ABCD1234      |
+| DB_ENDPOINT           | The host of the DynamoDB instance                                                         | http://dynamo-db:8000         |
+| DEV_MODE              | Monitor python modules to trigger reload (use only in development)                        | false                         |
+| VERIFY_CERTS          | For development, set an environment variable to disable HTTPS certificate verification    | false                         |
+
+### Disclaimer
+In this service, the **nginx/ssl/dhparam.pem** file is provided for ease of setup. In production environments, it is highly recommended for secure key-exchange to replace this file with your own generated DH parameter.
+
+You can generate your own **dhparam.pem** file using the command below:
+```
+openssl dhparam -out nginx/ssl/dhparam.pem 2048
+```
