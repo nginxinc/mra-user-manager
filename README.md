@@ -115,15 +115,15 @@ docker build . -t <your-image-repo-name>/user-manager:<tag>
 ### 5. Runtime environment variables
 In order to run the image, some environment variables must be set so that they are available during runtime.
 
-| Variable Name         | Description                                                                            | Example Value                 |
-| --------------------- | -------------------------------------------------------------------------------------- | ----------------------------- |
-| ALBUM_MANAGER_URL     |                                                                                        | http://localhost/album-manager|
-| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                    | ABCD1234ABCD1234ABCD1234      |
-| AWS_REGION            | The region where your S3 instance is running                                           | us-west-1                     |
-| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                             | ABCD1234ABCD1234ABCD1234      |
-| DB_ENDPOINT           | The host of the DynamoDB instance                                                      | http://dynamo-db:8000         |
-| DEV_MODE              | Monitor python modules to trigger reload (use only in development)                     | false                         |
-| VERIFY_CERTS          | For development, set an environment variable to disable HTTPS certificate verification | false                         |
+| Variable Name         | Description                                                                                       | Example Value                 |
+| --------------------- | ------------------------------------------------------------------------------------------------- | ----------------------------- |
+| ALBUM_MANAGER_URL     |                                                                                                   | http://localhost/album-manager|
+| AWS_ACCESS_KEY_ID     | Your AWS Key for S3                                                                               | ABCD1234ABCD1234ABCD1234      |
+| AWS_REGION            | The region where your S3 instance is running                                                      | us-west-1                     |
+| AWS_SECRET_ACCESS_KEY | Your AWS Secret Access Key                                                                        | ABCD1234ABCD1234ABCD1234      |
+| DB_ENDPOINT           | The host of the DynamoDB instance                                                                 | http://dynamo-db:8000         |
+| DEV_MODE              | (Optional) For development only, monitor python modules to trigger reload                         | false                         |
+| VERIFY_CERTS          | (Optional) For development, set an environment variable to disable HTTPS certificate verification | false                         |
 
 ### 6. Service Endpoints
 
