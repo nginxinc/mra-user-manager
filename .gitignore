@@ -1,0 +1,10 @@
+/user-manager.iml
+.idea
+.env
+env
+*.pyc
+.DS_Store
+certificate.pem
+csr.pem
+key.pem
+vault_env.sh

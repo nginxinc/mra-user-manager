@@ -1,0 +1,270 @@
+swagger: "2.0"
+info:
+  description: "NGRA User Management API"
+  version: "1.0.0"
+  title: "MRA User Management API"
+  contact:
+    name: "Charles Pretzer"
+    email: "charles.pretzer@nginx.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+basePath: "/v1"
+paths:
+  /:
+    get:
+      operationId: "app.healthcheck"
+      responses:
+        default:
+          description: "successful operation"
+  /users:
+    post:
+      tags:
+      - "user"
+      summary: "Create user"
+      description: "This can only be done by the logged in user."
+      operationId: "app.create_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created user object"
+        required: false
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        default:
+          description: "successful operation"
+      x-tags:
+      - tag: "user"
+      x-operationId: "create_user"
+  /users/facebook/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by facebook id"
+      description: ""
+      operationId: "app.get_user_by_facebook_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_facebook_id"
+  /users/google/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by google id"
+      description: ""
+      operationId: "app.get_user_by_google_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_google_id"
+  /users/local/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by local id"
+      description: ""
+      operationId: "app.get_user_by_local_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_local_id"
+  /users/email/{email}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by email address"
+      description: ""
+      operationId: "app.get_user_by_email"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "email"
+        in: "path"
+        description: "The email address of the user to fetch."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid email supplied"
+        404:
+          description: "User not found for email address"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_email"
+  /users/email/auth:
+    post:
+      tags:
+      - "user"
+      summary: "Authenticate user"
+      description: ""
+      operationId: "app.auth_local_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Authenticating user object"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid email supplied"
+        404:
+          description: "User not found for email address"
+      x-tags:
+      - tag: "user"
+      x-operationId: "auth_local_user"
+  /users/{id}:
+    get:
+      tags:
+      - "user"
+      summary: "Get user by user id"
+      description: ""
+      operationId: "app.get_user_by_id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that needs to be fetched."
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/User"
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "get_user_by_id"
+    put:
+      tags:
+      - "user"
+      summary: "Updated user"
+      description: "This can only be done by the logged in user."
+      operationId: "app.update_user"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The id that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: false
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        400:
+          description: "Invalid user supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "update_user"
+    delete:
+      tags:
+      - "user"
+      summary: "Delete user"
+      description: "This can only be done by the logged in user."
+      operationId: "app.delete_user"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "The user that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid id supplied"
+        404:
+          description: "User not found"
+      x-tags:
+      - tag: "user"
+      x-operationId: "delete_user"
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      facebook_id:
+        type: "string"
+      google_id:
+        type: "string"
+      banner_album_id:
+        type: "string"
+      password:
+        type: "string"
