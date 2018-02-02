@@ -1,4 +1,5 @@
 #!/bin/sh
+NGINX_PID="/var/run/nginx.pid"    # /   (root directory)
 APP="uwsgi --ini uwsgi.ini"
 DEBUG=""
 
@@ -10,10 +11,12 @@ fi
 # start the application using UWSGI
 $APP $DEBUG
 
+nginx -c "/etc/nginx/nginx.conf" -g "pid $NGINX_PID;"
+
 sleep 30
 APP_PID=`ps aux | grep $APP | grep -v grep`
 
-while [ "$APP_PID" ];
+while [ -f "$NGINX_PID" ] &&  [ "$APP_PID" ];
 do 
 	sleep 5;
 	APP_PID=`ps aux | grep $APP | grep -v grep`;
