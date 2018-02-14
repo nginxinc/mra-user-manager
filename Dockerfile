@@ -29,7 +29,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 
 VOLUME ["/var/cache/nginx"]
 
-
+COPY ./app/status.html /usr/share/nginx/html/status.html
 
 EXPOSE 80 443
 
