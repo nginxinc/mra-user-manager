@@ -125,6 +125,14 @@ In order to run the image, some environment variables must be set so that they a
 | DEV_MODE              | (Optional) For development only, monitor python modules to trigger reload                         | false                         |
 | VERIFY_CERTS          | (Optional) For development, set an environment variable to disable HTTPS certificate verification | false                         |
 
+#### Using DEV_MODE
+When the DEV_MODE environment variable is set to _true_, the [start.sh](app/start.sh) script will add the py-autoreload option to the command that starts the python application. As a result any changes made to the [app.py](app/app.py) file will be picked up by the application. A side-effect of enabling py-autoreload will cause the log continuously output
+```
+user-manager       | uwsgi_check_logrotate()/lseek(): Illegal seek [core/logging.c line 494]
+```
+
+We plan to address the logging issue in a future release. 
+
 ### 6. Service Endpoints
 
 | Method | Endpoint             | Description             | Parameters              |

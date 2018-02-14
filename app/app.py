@@ -250,10 +250,15 @@ def create_user(body) -> str:
     r = requests.post(url, headers=headers, data=data, verify=verify_certs)
     cv_r = r.json()
 
+    # Call the album manager to create the Article Pictures album
+    data = {'album[name]': 'Article Pictures', 'album[state]': 'active'}
+    r = requests.post(url, headers=headers, data=data, verify=verify_certs)
+    av_r = r.json()
+
     # set parameters in the body dictionary and update the user entry in the
     # user table
     body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id']),
-                       'profile_picture_url': 'generic'}
+                       'profile_picture_url': 'generic', 'article_pictures_id': str(av_r['id'])}
     body = update_user(body['id'], body_albums_ids)
 
     return body
