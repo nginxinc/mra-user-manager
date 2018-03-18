@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: user-manager
+  namespace: nginx-mra
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-mra
+        component: user-manager
+    spec:
+      imagePullSecrets:
+        - name: <DOCKER_SECRET>
+      containers:
+      - name: user-manager
+        image: <IMAGE_REPO_AND_TAG>
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 443
+          name: https
+        env:
+          - name: ALBUM_MANAGER_URL
+            value: "https://album-manager.nginx-mra/albums"
+          - name: AWS_ACCESS_KEY_ID
+            value: <AWS_ACCESS_KEY_ID>
+          - name: AWS_DEFAULT_REGION
+            value: us-west-1
+          - name: AWS_SECRET_ACCESS_KEY
+            value: <AWS_SECRET_ACCESS_KEY>
+          - name: DB_ENDPOINT
+            value: "http://dynamo-db.nginx-mra.svc.cluster.local:8000"
+          - name: VERIFY_CERTS
+            value: "False"
+        livenessProbe:
+          httpGet:
+            scheme: HTTPS
+            path: /status
+            port: 443
+            httpHeaders:
+              - name: Host
+                value: <K8S_HOST_NAME>
+          periodSeconds: 20
+          timeoutSeconds: 20
+          successThreshold: 1
+          failureThreshold: 10
