@@ -41,8 +41,8 @@ IP addresses to which the request should be load balanced.
 
 ## Configuration Files
 Each of the files below corresponds to a value of the _CONTAINER_ENGINE_ ENV variable. If no value is set or an unrecognized value is used, 
-the default is [fabric_config.yaml](fabric/fabric_config.yaml) and an image will be created for DC/OS.
-- [fabric_config.yaml](fabric/fabric_config.yaml): Builds an image for DC/OS
+the default is [fabric_config.yaml](fabric/fabric_config_dcos.yaml) and an image will be created for DC/OS.
+- [fabric_config.yaml](fabric/fabric_config_dcos.yaml): Builds an image for DC/OS
 - [fabric_config_k8s.yaml](fabric/fabric_config_k8s.yaml): Builds an image for Kubernetes
 - [fabric_config_local.yaml](fabric/fabric_config_local.yaml): Builds an image for running the MRA on your local machine
 

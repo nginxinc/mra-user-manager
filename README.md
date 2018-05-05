@@ -72,7 +72,7 @@ The [Dockerfile](Dockerfile) sets some ENV arguments which are used when the ima
         When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric/fabric_config_k8s.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)
      - mesos: to run on DC/OS
-        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric/fabric_config.yaml) will be
+        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric/fabric_config_dcos.yaml) will be
         used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)  
      - local: to run in containers on the machine where the repository has been cloned
         When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric/fabric_config_local.yaml) will be
