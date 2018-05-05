@@ -69,14 +69,14 @@ The [Dockerfile](Dockerfile) sets some ENV arguments which are used when the ima
 - **CONTAINER_ENGINE**  
     The container engine used to run the images in a container. _CONTAINER_ENGINE_ can be one of the following values
      - kubernetes (default): to run on Kubernetes
-        When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric_config_k8s.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)
+        When the nginx.conf file is built, the [fabric_config_k8s.yaml](nginx/fabric/fabric_config_k8s.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)
      - mesos: to run on DC/OS
-        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric_config.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)  
+        When the nginx.conf file is built, the [fabric_config.yaml](nginx/fabric/fabric_config.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)  
      - local: to run in containers on the machine where the repository has been cloned
-        When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric_config_local.yaml) will be
-        used to populate the open source version of the [nginx.conf template](nginx/nginx-plus-fabric.conf.j2)                  
+        When the nginx.conf file is built, the [fabric_config_local.yaml](nginx/fabric/fabric_config_local.yaml) will be
+        used to populate the open source version of the [nginx.conf template](nginx/fabric/fabric_nginx-plus.conf.j2)                  
      
 ### 2. Decide whether to use NGINX Open Source or NGINX Plus
 #### <a href="#" id="installing-nginx-oss"></a>Installing NGINX Open Source
