@@ -1,5 +1,7 @@
 FROM ngrefarch/python_base:3.5
 
+RUN useradd --create-home -s /bin/bash user-manager
+
 ARG CONTAINER_ENGINE_ARG
 ARG USE_NGINX_PLUS_ARG
 ARG USE_VAULT_ARG
