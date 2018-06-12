@@ -8,6 +8,9 @@ FABRIC_TEMPLATE_FILE="/etc/nginx/fabric/fabric_nginx-plus.conf.j2"
 if [ "$USE_NGINX_PLUS" = false ];
 then
     FABRIC_TEMPLATE_FILE="/etc/nginx/fabric/fabric_nginx.conf.j2"
+elif [ "$USE_MTLS" = true ];
+then
+    FABRIC_TEMPLATE_FILE="/etc/nginx/fabric/fabric_mtls_nginx-plus.conf.j2"
 fi
 
 echo Generating NGINX configurations...
