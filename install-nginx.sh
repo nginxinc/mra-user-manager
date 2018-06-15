@@ -63,3 +63,4 @@ else
 fi
 
 sh /etc/nginx/generate-nginx-config.sh
+sh /etc/nginx/generate-custom-nginx-config.sh

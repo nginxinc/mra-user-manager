@@ -21,7 +21,8 @@ case "$NETWORK" in
         echo 'Fabric configuration set'
         nginx -c "$NGINX_CONF" -g "pid $NGINX_PID;" &
 
-        sleep 30
+        sleep 10
+
         while [ -f "$NGINX_PID" ] &&  [ "$APP_PID" ];
         do
 	        sleep 5;
@@ -29,6 +30,13 @@ case "$NETWORK" in
         done
         ;;
     router-mesh)
+        while [ "$APP_PID" ];
+        do
+	        sleep 5;
+	        APP_PID=`ps aux | grep ${APP} | grep -v grep`;
+        done
+        ;;
+    proxy)
         while [ "$APP_PID" ];
         do
 	        sleep 5;
