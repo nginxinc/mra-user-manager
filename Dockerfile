@@ -1,4 +1,4 @@
-FROM ngrefarch/python_base:3.5
+FROM python:3.5
 
 RUN useradd --create-home -s /bin/bash user-manager
 
@@ -18,6 +18,15 @@ ENV USE_NGINX_PLUS=${USE_NGINX_PLUS_ARG:-true} \
     CONTAINER_ENGINE=${CONTAINER_ENGINE_ARG:-kubernetes} \
 	NETWORK=${NETWORK_ARG:-fabric} \
 	USE_MTLS=${USE_MTLS_ARG:-false}
+
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
+    apt-get update && apt-get install -y -q \
+    apt-transport-https \
+    libffi-dev \
+    libssl-dev \
+    lsb-release \
+    wget && \
+    cd /
 
 COPY nginx/ssl /etc/ssl/nginx/
 
