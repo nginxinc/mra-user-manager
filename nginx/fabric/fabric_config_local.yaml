@@ -4,6 +4,7 @@ resolver:
   host: 127.0.0.11
   ttl: 1s
 log_to_syslog : false
+namespace:
 syslog_error_log_location: "syslog:server=localhost:5544 debug"
 error_log_location: "/var/log/nginx/error_log debug"
 service_log_name: pages_mra
