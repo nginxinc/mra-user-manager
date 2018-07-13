@@ -1,4 +1,4 @@
-/user-manager.iml
+*.iml
 .idea
 .env
 env
@@ -8,4 +8,3 @@ certificate.pem
 csr.pem
 key.pem
 vault_env.sh
-*.iml
