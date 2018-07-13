@@ -1,0 +1,27 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: dynamo-db
+  namespace: nginx-mra
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx-mra
+        component: dynamo-db
+    spec:
+      containers:
+      - name: dynamo-db
+        image: docker.io/deangiberson/aws-dynamodb-local:2017-03-08
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          name: http
+        volumeMounts:
+          - name: dynamo-db-persistent-storage
+            mountPath: /var/dynamodb_local
+      volumes:
+        - name: dynamo-db-persistent-storage
+          persistentVolumeClaim:
+            claimName: dynamo-db-pv-claim

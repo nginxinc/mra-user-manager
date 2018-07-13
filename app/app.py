@@ -7,6 +7,7 @@ import logging
 import uuid
 import os
 import requests
+import database
 
 from flask import abort, g
 
@@ -63,134 +64,10 @@ def get_db():
 
 #
 # Get the users table from the database
-# TODO: This is a hack. We will clean this up in v2. For the purposes of a
-# reference application, we check for the able and create it if it doesn't
-# exist. Production grade services should remove this logic in favor of
-# a proper script to create the table
 #
 def get_users_table():
 
     client = get_db()
-    try:
-        table = client.create_table(
-            TableName='users',
-            KeySchema=[
-                {
-                    'AttributeName': 'id',
-                    'KeyType': 'HASH'
-                }
-            ],
-            AttributeDefinitions=[
-                {
-                    'AttributeName': 'id',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'google_id',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'facebook_id',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'local_id',
-                    'AttributeType': 'S'
-                },
-                {
-                    'AttributeName': 'email',
-                    'AttributeType': 'S'
-                }
-            ],
-            GlobalSecondaryIndexes=[
-                {
-                    'IndexName': 'google_id-index',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'google_id',
-                            'KeyType': 'HASH'
-                        },
-                    ],
-                    'Projection': {
-                        'ProjectionType': 'ALL',
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 5,
-                        'WriteCapacityUnits': 5
-                    }
-                },
-                {
-                    'IndexName': 'facebook_id-index',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'facebook_id',
-                            'KeyType': 'HASH'
-                        },
-                    ],
-                    'Projection': {
-                        'ProjectionType': 'ALL',
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 5,
-                        'WriteCapacityUnits': 5
-                    }
-                },
-                {
-                    'IndexName': 'email_address-index',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'email',
-                            'KeyType': 'HASH'
-                        },
-                    ],
-                    'Projection': {
-                        'ProjectionType': 'ALL',
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 5,
-                        'WriteCapacityUnits': 5
-                    }
-                },
-                {
-                    'IndexName': 'local_id-index',
-                    'KeySchema': [
-                        {
-                            'AttributeName': 'local_id',
-                            'KeyType': 'HASH'
-                        },
-                    ],
-                    'Projection': {
-                        'ProjectionType': 'ALL',
-                    },
-                    'ProvisionedThroughput': {
-                        'ReadCapacityUnits': 5,
-                        'WriteCapacityUnits': 5
-                    }
-                }
-            ],
-            ProvisionedThroughput={
-                'ReadCapacityUnits': 5,
-                'WriteCapacityUnits': 5
-            }
-        )
-
-        logging.debug("+++++++++ table: " + str(table))
-
-        if table is not None and len(table) > 0:
-            table.meta.client.get_waiter('table_exists').wait(TableName='users')
-            
-    except Exception as e:
-        logging.error('===== error is', e)
-
-        if e is AttributeError:
-            logging.error('++++++ attribute error', e);
-
-        if e is botocore.exceptions.ClientError and 'Error' in e.response and \
-                e.response['Error']['Code'] == 'ResourceInUseException':
-            logging.debug('======= looking for users table: already exists')
-        else:
-            logging.error('Unable to process error', e)
-
     return client.Table('users')
 
 
@@ -250,10 +127,15 @@ def create_user(body) -> str:
     r = requests.post(url, headers=headers, data=data, verify=verify_certs)
     cv_r = r.json()
 
+    # Call the album manager to create the Article Pictures album
+    data = {'album[name]': 'Article Pictures', 'album[state]': 'active'}
+    r = requests.post(url, headers=headers, data=data, verify=verify_certs)
+    av_r = r.json()
+
     # set parameters in the body dictionary and update the user entry in the
     # user table
     body_albums_ids = {'profile_pictures_id': str(pp_r['id']), 'cover_pictures_id': str(cv_r['id']),
-                       'profile_picture_url': 'generic'}
+                       'profile_picture_url': 'generic', 'article_pictures_id': str(av_r['id'])}
     body = update_user(body['id'], body_albums_ids)
 
     return body

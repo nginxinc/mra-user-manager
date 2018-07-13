@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-manager
+  labels:
+    app: nginx-mra
+    component: user-manager
+  namespace: nginx-mra
+spec:
+  type: NodePort
+  ports:
+  - port: 443
+    targetPort: 443
+    protocol: TCP
+    name: https
+  selector:
+    app: nginx-mra
+    component: user-manager
