@@ -78,7 +78,11 @@ http {
   {% if services %}
     {% for name, service in services.iteritems() %}
     upstream {{ name }} {
-    server        {{ service.server }} {{ service.service }} resolve;
+  {% if namespace != None and namespace != '' %}
+    server        {{ namespace }}.{% if service.server == None or service.server == '' %}{{ name }}{% else %}{{ service.server }}{% endif %} {{ service.service }} resolve;
+  {% else %}
+    server        {% if namespace != None and namespace != '' %}{{ namespace }}.{% endif %}{% if service.server == None or service.server == '' %}{{ name }}{% else %}{{ service.server }}{% endif %}{% if service.port %}:{{ service.port }}{% endif %} {{ service.service }} resolve;
+  {% endif %}
     zone backend  64k;
     least_time 		last_byte;
     keepalive 		300;
