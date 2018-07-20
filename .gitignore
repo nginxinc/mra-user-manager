@@ -8,3 +8,6 @@ certificate.pem
 csr.pem
 key.pem
 vault_env.sh
+*.pem
+*.csr
+*.key
