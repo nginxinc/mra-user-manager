@@ -14,7 +14,7 @@ newrelic==2.64.0.48
 ordereddict==1.1
 python-dateutil==2.4.2
 python-dotenv==0.6.0
-PyYAML==3.11
+PyYAML==5.1
 requests==2.8.1
 six==1.10.0
 strict-rfc3339==0.6
